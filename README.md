@@ -57,7 +57,6 @@ import { SocialLoginModule } from "nestj-social-login";
       },
       appleLoginConfig: {
         clientId: "your_apple_client_id",
-        clientSecret: "your_apple_client_secret",
         issuer: "https://appleid.apple.com", // 필수
         state: "your_state_value", // 선택사항
       },
@@ -86,7 +85,6 @@ NAVER_CLIENT_SECRET=your_naver_client_secret
 
 # Apple
 APPLE_CLIENT_ID=your_apple_client_id
-APPLE_CLIENT_SECRET=your_apple_client_secret
 APPLE_ISSUER=https://appleid.apple.com
 
 # Domain
@@ -398,4 +396,5 @@ export class AuthController {
 ## 라이센스
 
 MIT License
+
 # nestjs-social-login
