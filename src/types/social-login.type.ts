@@ -20,7 +20,6 @@ export interface NaverLoginConfig {
 
 export interface AppleLoginConfig {
   clientId: string;
-  clientSecret: string;
   issuer: string;
   state?: string;
 }
