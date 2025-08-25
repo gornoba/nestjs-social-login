@@ -1,0 +1,59 @@
+{
+  "name": "nestj-social-login",
+  "version": "0.1.5",
+  "description": "NestJS Social Login",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "prePublishOnly": "npm run build"
+  },
+  "keywords": [
+    "nestjs",
+    "social-login",
+    "kakao-login"
+  ],
+  "author": "Hyunhoo Im",
+  "license": "MIT",
+  "type": "commonjs",
+  "peerDependencies": {
+    "@nestjs/common": "^8 || ^9 || ^10 || ^11",
+    "@nestjs/core": "^8 || ^9 || ^10 || ^11",
+    "reflect-metadata": "^0.1.13 || ^0.2.0",
+    "rxjs": "^7.5.6"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^11.0.10",
+    "@nestjs/schematics": "^11.0.7",
+    "@nestjs/testing": "^11.1.6",
+    "@types/express": "^5.0.3",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.3.0",
+    "@types/supertest": "^6.0.3",
+    "@typescript-eslint/eslint-plugin": "^8.40.0",
+    "@typescript-eslint/parser": "^8.40.0",
+    "eslint": "^9.34.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "jest": "^30.0.5",
+    "prettier": "^3.6.2",
+    "source-map-support": "^0.5.21",
+    "supertest": "^7.1.4",
+    "ts-jest": "^29.4.1",
+    "ts-loader": "^9.5.4",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.9.2"
+  }
+}
