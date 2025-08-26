@@ -34,7 +34,7 @@ export class GoogleLoginGuard implements CanActivate {
       throw new NotFoundException('Google login config not found');
     }
 
-    const { clientId, scope, state } = googleLoginConfig;
+    const { clientId, state } = googleLoginConfig;
     const { code, state: queryState } = request.query as {
       code: string;
       state: string;
@@ -44,12 +44,7 @@ export class GoogleLoginGuard implements CanActivate {
     const redirectUri = domainTransform(domain, url);
 
     if (!code) {
-      const redirectUrl = this.getCodeRedirect(
-        clientId,
-        redirectUri,
-        scope,
-        state,
-      );
+      const redirectUrl = this.getCodeRedirect(clientId, redirectUri, state);
       response.status(302).redirect(redirectUrl);
       return false;
     }
@@ -69,14 +64,13 @@ export class GoogleLoginGuard implements CanActivate {
   private getCodeRedirect(
     clientId: string,
     redirectUri: string,
-    scope?: string,
     state?: string,
   ) {
     const params = new URLSearchParams({
       client_id: clientId,
       redirect_uri: redirectUri,
       response_type: 'code',
-      ...(scope && { scope }),
+      scope: 'email profile',
       ...(state && { state }),
     });
     return `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;

@@ -8,7 +8,6 @@ export interface KakaoLoginConfig {
 export interface GoogleLoginConfig {
   clientId: string;
   clientSecret: string;
-  scope?: string;
   state?: string;
 }
 
@@ -20,8 +19,8 @@ export interface NaverLoginConfig {
 
 export interface AppleLoginConfig {
   clientId: string;
-  issuer: string;
   state?: string;
+  testDomain?: string;
 }
 
 export interface SocialLoginInterface {

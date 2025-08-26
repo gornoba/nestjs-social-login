@@ -316,11 +316,14 @@ export class AuthController {
   @Post("apple")
   @UseGuards(AppleLoginGuard)
   async appleLogin(@Req() req: Request, @Body() body: any) {
+    // 처음 보내면 redirect URL을 return
+
     // 애플 로그인 성공 후 처리
-    const { appleAuth, state } = req["appleData"];
+    const { appleAuth, state, user } = req["appleData"];
 
     // appleAuth: 검증된 JWT 토큰 정보
     // state: 상태값
+    // user: 이름, 이메일 (최초 로그인에만 적용)
 
     return {
       message: "Apple login successful",
@@ -343,14 +346,23 @@ export class AuthController {
 ```typescript
 // appleAuth (검증된 JWT 토큰)
 {
-  iss: string; // 토큰 발급자
-  aud: string; // 대상 클라이언트 ID
-  exp: number; // 만료 시간
-  iat: number; // 발급 시간
-  sub: string; // 사용자 식별자
-  c_hash: string; // 코드 해시
-  auth_time: number; // 인증 시간
-  nonce_supported: boolean; // nonce 지원 여부
+  appleAuth: {
+    iss: string; // 토큰 발급자
+    aud: string; // 대상 클라이언트 ID
+    exp: number; // 만료 시간
+    iat: number; // 발급 시간
+    sub: string; // 사용자 식별자
+    c_hash: string; // 코드 해시
+    auth_time: number; // 인증 시간
+    nonce_supported: boolean; // nonce 지원 여부
+  },
+  state: test,
+  user: {
+    {
+      name: { firstName: string; lastName: string };
+      email: string;
+    }
+  }
 }
 ```
 
@@ -362,6 +374,7 @@ export class AuthController {
 
 - `code` 파라미터가 없으면 해당 소셜 로그인 페이지로 자동 리다이렉트
 - `code` 파라미터가 있으면 토큰 교환 및 사용자 정보 조회 후 처리
+- 애플 로그인 제외
 
 ### 2. 상태값 관리
 

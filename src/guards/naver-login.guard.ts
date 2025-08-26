@@ -123,7 +123,7 @@ export class NaverLoginGuard implements CanActivate {
 
   private async naverUserInfo(accessToken: string) {
     try {
-      const result = await axios.post(`https://openapi.naver.com/v1/nid/me`, {
+      const result = await axios.get(`https://openapi.naver.com/v1/nid/me`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
