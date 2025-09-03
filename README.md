@@ -1,6 +1,7 @@
 # NestJS Social Login
 
-NestJS에서 Apple, Google, Kakao, Naver 소셜 로그인을 쉽게 구현할 수 있는 모듈입니다.
+NestJS에서 Apple, Google, Kakao, Naver 소셜 로그인을 쉽게 구현할 수 있는 모듈입니다. <br/>
+최신 문서는 Github의 README를 참고해주세요.
 
 ## 설치
 
@@ -57,8 +58,8 @@ import { SocialLoginModule } from "nestj-social-login";
       },
       appleLoginConfig: {
         clientId: "your_apple_client_id",
-        issuer: "https://appleid.apple.com", // 필수
         state: "your_state_value", // 선택사항
+        testDomain: "your_test_domain", // 선택사항. 테스트할 도메인 (ex: ngrok)
       },
     }),
   ],
@@ -85,7 +86,6 @@ NAVER_CLIENT_SECRET=your_naver_client_secret
 
 # Apple
 APPLE_CLIENT_ID=your_apple_client_id
-APPLE_ISSUER=https://appleid.apple.com
 
 # Domain
 DOMAIN=https://yourdomain.com
