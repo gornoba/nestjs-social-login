@@ -4,18 +4,18 @@ import {
   Injectable,
   Logger,
   NotFoundException,
-} from '@nestjs/common';
-import { SOCIAL_LOGIN_CONFIG } from '../social-login.constant';
-import { SocialLoginModule } from '../social-login.module';
+} from "@nestjs/common";
+import { SOCIAL_LOGIN_CONFIG } from "../social-login.constant";
+import { SocialLoginModule } from "../social-login.module";
 import {
   AppleLoginConfig,
   SocialLoginInterface,
-} from '../types/social-login.type';
-import { domainTransform } from '../utils/domain-transform.util';
-import axios from 'axios';
-import { ApplePublicKey, AppleToken } from '../types/apple.type';
-import * as jwt from 'jsonwebtoken';
-import * as jwkToPem from 'jwk-to-pem';
+} from "../types/social-login.type";
+import { domainTransform } from "../utils/domain-transform.util";
+import axios from "axios";
+import { ApplePublicKey, AppleToken } from "../types/apple.type";
+import * as jwt from "jsonwebtoken";
+import * as jwkToPem from "jwk-to-pem";
 
 @Injectable()
 export class AppleLoginGuard implements CanActivate {
@@ -25,7 +25,7 @@ export class AppleLoginGuard implements CanActivate {
   constructor() {
     this.appleConfig = Reflect.getMetadata(
       SOCIAL_LOGIN_CONFIG,
-      SocialLoginModule,
+      SocialLoginModule
     );
   }
 
@@ -35,7 +35,7 @@ export class AppleLoginGuard implements CanActivate {
     const { appleLoginConfig, domain } = this.appleConfig;
 
     if (!appleLoginConfig) {
-      throw new NotFoundException('Apple login config not found');
+      throw new NotFoundException("Apple login config not found");
     }
 
     const { clientId, state, testDomain } = appleLoginConfig;
@@ -45,17 +45,21 @@ export class AppleLoginGuard implements CanActivate {
     const redirectUri = domainTransform(testDomain || domain, url);
 
     if (!body?.code) {
-      const redirectUrl = this.getCodeRedirect(clientId, redirectUri, state);
+      const redirectUrl = this.getCodeRedirect(
+        clientId,
+        redirectUri,
+        body?.state || state
+      );
       response.send(redirectUrl);
       return false;
     }
 
     const verifiedCode = await this.appleCodeVerify(
       body.id_token,
-      appleLoginConfig,
+      appleLoginConfig
     );
 
-    request['appleData'] = {
+    request["appleData"] = {
       appleAuth: verifiedCode,
       user: this.isJson(body?.user) ? JSON.parse(body?.user) : body?.user,
       state: body?.state,
@@ -77,14 +81,14 @@ export class AppleLoginGuard implements CanActivate {
   private getCodeRedirect(
     clientId: string,
     redirectUri: string,
-    state?: string,
+    state?: string
   ) {
     const params = new URLSearchParams({
       client_id: clientId,
       redirect_uri: redirectUri,
-      response_type: 'code id_token',
-      scope: 'email name openid',
-      response_mode: 'form_post',
+      response_type: "code id_token",
+      scope: "email name openid",
+      response_mode: "form_post",
       ...(state && { state }),
     });
     return `https://appleid.apple.com/auth/authorize?${params.toString()}`;
@@ -98,7 +102,7 @@ export class AppleLoginGuard implements CanActivate {
     const key = publicKeys.find((key) => key.kid === decodedHeader.header.kid);
 
     if (!key) {
-      throw new NotFoundException('Unable to find matching Apple public key');
+      throw new NotFoundException("Unable to find matching Apple public key");
     }
 
     // 공개키 생성
@@ -108,14 +112,14 @@ export class AppleLoginGuard implements CanActivate {
     const verifiedToken = jwt.verify(code, pem, {
       algorithms: [key.alg],
       audience: appleConfig.clientId,
-      issuer: 'https://appleid.apple.com',
+      issuer: "https://appleid.apple.com",
     }) as AppleToken;
 
     return verifiedToken;
   }
 
   private async getApplePublicKey(): Promise<ApplePublicKey[]> {
-    const result = await axios.get('https://appleid.apple.com/auth/keys');
+    const result = await axios.get("https://appleid.apple.com/auth/keys");
     return result.data.keys;
   }
   1;

@@ -5,13 +5,13 @@ import {
   InternalServerErrorException,
   Logger,
   NotFoundException,
-} from '@nestjs/common';
-import { SocialLoginInterface } from '../types/social-login.type';
-import { SOCIAL_LOGIN_CONFIG } from '../social-login.constant';
-import { SocialLoginModule } from '../social-login.module';
-import { domainTransform } from '../utils/domain-transform.util';
-import axios from 'axios';
-import { GoogleAuth, GoogleUser } from '../types/google.type';
+} from "@nestjs/common";
+import { SocialLoginInterface } from "../types/social-login.type";
+import { SOCIAL_LOGIN_CONFIG } from "../social-login.constant";
+import { SocialLoginModule } from "../social-login.module";
+import { domainTransform } from "../utils/domain-transform.util";
+import axios from "axios";
+import { GoogleAuth, GoogleUser } from "../types/google.type";
 
 @Injectable()
 export class GoogleLoginGuard implements CanActivate {
@@ -21,7 +21,7 @@ export class GoogleLoginGuard implements CanActivate {
   constructor() {
     this.googleConfig = Reflect.getMetadata(
       SOCIAL_LOGIN_CONFIG,
-      SocialLoginModule,
+      SocialLoginModule
     );
   }
 
@@ -31,7 +31,7 @@ export class GoogleLoginGuard implements CanActivate {
     const { googleLoginConfig, domain } = this.googleConfig;
 
     if (!googleLoginConfig) {
-      throw new NotFoundException('Google login config not found');
+      throw new NotFoundException("Google login config not found");
     }
 
     const { clientId, state } = googleLoginConfig;
@@ -44,7 +44,11 @@ export class GoogleLoginGuard implements CanActivate {
     const redirectUri = domainTransform(domain, url);
 
     if (!code) {
-      const redirectUrl = this.getCodeRedirect(clientId, redirectUri, state);
+      const redirectUrl = this.getCodeRedirect(
+        clientId,
+        redirectUri,
+        queryState || state
+      );
       response.status(302).redirect(redirectUrl);
       return false;
     }
@@ -52,7 +56,7 @@ export class GoogleLoginGuard implements CanActivate {
     const googleAuth = await this.googleCodeVerify(code, redirectUri);
     const googleUser = await this.googleUserInfo(googleAuth.access_token);
 
-    request['googleData'] = {
+    request["googleData"] = {
       googleAuth,
       googleUser,
       state: queryState,
@@ -64,13 +68,13 @@ export class GoogleLoginGuard implements CanActivate {
   private getCodeRedirect(
     clientId: string,
     redirectUri: string,
-    state?: string,
+    state?: string
   ) {
     const params = new URLSearchParams({
       client_id: clientId,
       redirect_uri: redirectUri,
-      response_type: 'code',
-      scope: 'email profile',
+      response_type: "code",
+      scope: "email profile",
       ...(state && { state }),
     });
     return `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
@@ -80,21 +84,21 @@ export class GoogleLoginGuard implements CanActivate {
     const { googleLoginConfig } = this.googleConfig;
 
     if (!googleLoginConfig) {
-      throw new NotFoundException('Google login config not found');
+      throw new NotFoundException("Google login config not found");
     }
 
     const { clientId, clientSecret } = googleLoginConfig;
 
     try {
       const result = await axios.post(
-        'https://oauth2.googleapis.com/token',
+        "https://oauth2.googleapis.com/token",
         new URLSearchParams({
-          grant_type: 'authorization_code',
+          grant_type: "authorization_code",
           client_id: clientId,
           client_secret: clientSecret,
           redirect_uri: redirectUri,
           code,
-        }),
+        })
       );
       return result.data as GoogleAuth;
     } catch (error) {
@@ -111,7 +115,7 @@ export class GoogleLoginGuard implements CanActivate {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
-        },
+        }
       );
       return result.data as GoogleUser;
     } catch (error) {

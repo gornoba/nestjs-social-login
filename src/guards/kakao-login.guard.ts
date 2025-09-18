@@ -5,13 +5,13 @@ import {
   InternalServerErrorException,
   Logger,
   NotFoundException,
-} from '@nestjs/common';
-import { SocialLoginInterface } from '../types/social-login.type';
-import { SocialLoginModule } from '../social-login.module';
-import { SOCIAL_LOGIN_CONFIG } from '../social-login.constant';
-import { domainTransform } from '../utils/domain-transform.util';
-import axios from 'axios';
-import { KakaoAuth, KakaoUser } from '../types/kakao.type';
+} from "@nestjs/common";
+import { SocialLoginInterface } from "../types/social-login.type";
+import { SocialLoginModule } from "../social-login.module";
+import { SOCIAL_LOGIN_CONFIG } from "../social-login.constant";
+import { domainTransform } from "../utils/domain-transform.util";
+import axios from "axios";
+import { KakaoAuth, KakaoUser } from "../types/kakao.type";
 
 @Injectable()
 export class KakaoLoginGuard implements CanActivate {
@@ -21,7 +21,7 @@ export class KakaoLoginGuard implements CanActivate {
   constructor() {
     this.kakaoConfig = Reflect.getMetadata(
       SOCIAL_LOGIN_CONFIG,
-      SocialLoginModule,
+      SocialLoginModule
     );
   }
 
@@ -31,7 +31,7 @@ export class KakaoLoginGuard implements CanActivate {
     const { kakaoLoginConfig, domain } = this.kakaoConfig;
 
     if (!kakaoLoginConfig) {
-      throw new NotFoundException('Kakao login config not found');
+      throw new NotFoundException("Kakao login config not found");
     }
 
     const { restApiKey, scope, state } = kakaoLoginConfig;
@@ -48,7 +48,7 @@ export class KakaoLoginGuard implements CanActivate {
         restApiKey,
         redirectUri,
         scope,
-        state,
+        queryState || state
       );
       response.status(302).redirect(redirectUrl);
       return false;
@@ -57,7 +57,7 @@ export class KakaoLoginGuard implements CanActivate {
     const kakaoAuth = await this.kakaoCodeVerify(code, redirectUri);
     const kakaoUser = await this.kakaoUserInfo(kakaoAuth.access_token);
 
-    request['kakaoData'] = {
+    request["kakaoData"] = {
       kakaoAuth,
       kakaoUser,
       state: queryState,
@@ -70,12 +70,12 @@ export class KakaoLoginGuard implements CanActivate {
     restApiKey: string,
     redirectUri: string,
     scope?: string,
-    state?: string,
+    state?: string
   ) {
     const params = new URLSearchParams({
       client_id: restApiKey,
       redirect_uri: redirectUri,
-      response_type: 'code',
+      response_type: "code",
       ...(scope && { scope }),
       ...(state && { state }),
     });
@@ -86,16 +86,16 @@ export class KakaoLoginGuard implements CanActivate {
     const { kakaoLoginConfig } = this.kakaoConfig;
 
     if (!kakaoLoginConfig) {
-      throw new NotFoundException('Kakao login config not found');
+      throw new NotFoundException("Kakao login config not found");
     }
 
     const { restApiKey, secretKey } = kakaoLoginConfig;
 
     try {
       const result = await axios.post(
-        'https://kauth.kakao.com/oauth/token',
+        "https://kauth.kakao.com/oauth/token",
         new URLSearchParams({
-          grant_type: 'authorization_code',
+          grant_type: "authorization_code",
           client_id: restApiKey,
           redirect_uri: redirectUri,
           code,
@@ -103,9 +103,9 @@ export class KakaoLoginGuard implements CanActivate {
         }),
         {
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            "Content-Type": "application/x-www-form-urlencoded",
           },
-        },
+        }
       );
 
       return result.data as KakaoAuth;
@@ -117,9 +117,9 @@ export class KakaoLoginGuard implements CanActivate {
 
   private async kakaoUserInfo(accessToken: string) {
     try {
-      const result = await axios.get('https://kapi.kakao.com/v2/user/me', {
+      const result = await axios.get("https://kapi.kakao.com/v2/user/me", {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          "Content-Type": "application/x-www-form-urlencoded",
           Authorization: `Bearer ${accessToken}`,
         },
       });

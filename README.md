@@ -91,6 +91,11 @@ APPLE_CLIENT_ID=your_apple_client_id
 DOMAIN=https://yourdomain.com
 ```
 
+### 3. 주의사항
+
+만약 첫 redirect 시 param으로 state를 보낸다면 `SocialLoginModule`에서 설정한 state는 무시하고 param의 state를 사용.
+apple login은 body안의 state를 사용.
+
 ## 사용방법
 
 ### Kakao 로그인
