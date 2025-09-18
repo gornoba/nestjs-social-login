@@ -8,6 +8,7 @@ export interface KakaoLoginConfig {
 export interface GoogleLoginConfig {
   clientId: string;
   clientSecret: string;
+  scope: string;
   state?: string;
 }
 

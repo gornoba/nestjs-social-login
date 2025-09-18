@@ -1,6 +1,6 @@
 {
   "name": "nestjs-social-login",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "NestJS Social Login",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
