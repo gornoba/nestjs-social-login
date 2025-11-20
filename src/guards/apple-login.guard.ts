@@ -14,8 +14,8 @@ import {
 import { domainTransform } from "../utils/domain-transform.util";
 import axios from "axios";
 import { ApplePublicKey, AppleToken } from "../types/apple.type";
-import * as jwt from "jsonwebtoken";
-import * as jwkToPem from "jwk-to-pem";
+import jwt from "jsonwebtoken";
+import jwkToPem from "jwk-to-pem";
 
 @Injectable()
 export class AppleLoginGuard implements CanActivate {
