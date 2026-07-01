@@ -6,7 +6,7 @@ NestJS에서 Apple, Google, Kakao, Naver 소셜 로그인을 쉽게 구현할 �
 ## 설치
 
 ```bash
-npm install nestj-social-login
+npm install nestjs-social-login
 ```
 
 ## 의존성
@@ -33,7 +33,7 @@ npm install nestj-social-login
 
 ```typescript
 import { Module } from "@nestjs/common";
-import { SocialLoginModule } from "nestj-social-login";
+import { SocialLoginModule } from "nestjs-social-login";
 
 @Module({
   imports: [
@@ -104,7 +104,7 @@ apple login은 body안의 state를 사용.
 
 ```typescript
 import { Controller, Get, UseGuards, Req } from "@nestjs/common";
-import { KakaoLoginGuard } from "nestj-social-login";
+import { KakaoLoginGuard } from "nestjs-social-login";
 import { Request } from "express";
 
 @Controller("auth")
@@ -182,7 +182,7 @@ export class AuthController {
 
 ```typescript
 import { Controller, Get, UseGuards, Req } from "@nestjs/common";
-import { GoogleLoginGuard } from "nestj-social-login";
+import { GoogleLoginGuard } from "nestjs-social-login";
 import { Request } from "express";
 
 @Controller("auth")
@@ -244,7 +244,7 @@ export class AuthController {
 
 ```typescript
 import { Controller, Get, UseGuards, Req } from "@nestjs/common";
-import { NaverLoginGuard } from "nestj-social-login";
+import { NaverLoginGuard } from "nestjs-social-login";
 import { Request } from "express";
 
 @Controller("auth")
@@ -313,7 +313,7 @@ export class AuthController {
 
 ```typescript
 import { Controller, Post, UseGuards, Req, Body } from "@nestjs/common";
-import { AppleLoginGuard } from "nestj-social-login";
+import { AppleLoginGuard } from "nestjs-social-login";
 import { Request } from "express";
 
 @Controller("auth")

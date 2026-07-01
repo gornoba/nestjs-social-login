@@ -1,6 +1,6 @@
 {
   "name": "nestjs-social-login",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "NestJS Social Login",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -17,7 +17,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/gornoba/nestjs-social-login"
+    "url": "git+https://github.com/gornoba/nestjs-social-login.git"
   },
   "homepage": "https://github.com/gornoba/nestjs-social-login#readme",
   "scripts": {
